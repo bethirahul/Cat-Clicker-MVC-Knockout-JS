@@ -1,23 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Cat Clicker</title>
-    <script
-        src="https://code.jquery.com/jquery-3.3.1.min.js"
-        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
         crossorigin="anonymous">
     </script>
-    <script src="script.js"></script>
+
+    <!-- Knockout JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js"></script>
+
+    <!-- my JavaScript file -->
+    <script src="js/script.js"></script>
+
 </head>
+
 <body>
     <h3>Cats:</h3>
-    <ul id="cat-links">
+    <ul id="cat-links" data-bind="foreach: cats">
+        <!--<li data-bind="text: name, click: function(data) { $parent.display_cat($index(), data) }"></li>-->
+        <li data-bind="text: name, click: $parent.display_cat"></li>
     </ul>
-    <p id="cat-name"></p>
-    <img id="cat-img" alt="" src="">
-    <p id="clicks"></p>
+    <div id="cat-info" data-bind="with: current_cat">
+        <p id="cat-name" data-bind="text: name"></p>
+        <img id="cat-img" alt="Cat Image" data-bind="attr: {'src': src}, click: $parent.register_click">
+        <p id="cat-clicks">
+            Number of clicks: <span data-bind="text: clicks"></span>
+        </p>
+    </div>
 </body>
+
 </html>

@@ -1,43 +1,69 @@
 
 function main()
 {
-    //===== M O D E L ==========================================================
+    //===== D A T A ============================================================
 
-    var model = {
-
-        catsInfo : {
-            "A": "a.png",
-            "B": "b.png",
-            "C": "c.png",
-            "D": "d.png",
-            "E": "e.png",
-        },
-
-        cat : function(name, src)
-        {
-            this.name = name;
-            this.src = src;
-            this.clicks = 0;
-        },
-
-        cats : [],
-
-        init : function()
-        {
-            for(var name in this.catsInfo)
-            {
-                var src = this.catsInfo[name];
-                var new_cat = new this.cat(name, src);
-                this.cats.push(new_cat);
-            }
-            //console.log(this.cats);
-        }
+    var cats_info = {
+        "A": "images/a.png",
+        "B": "images/b.png",
+        "C": "images/c.png",
+        "D": "images/d.png",
+        "E": "images/e.png",
     };
 
+    var cat = function(name, src)
+    {
+        this.name = ko.observable(name);
+        this.src = ko.observable(src);
+        this.clicks = ko.observable(0);
 
-    //===== H U B ==============================================================
+        this.print = function()
+        {
+            console.log(this.name() + ", " + this.src() + ", " + this.clicks());
+        }
+    }
 
-    var controller = {
+    //===== V I E W - M O D E L ================================================
+
+    var ViewModel = function()
+    {
+        var vm = this;
+
+        vm.cats = ko.observableArray([]);
+
+        (function()
+        {
+            i = 0;
+            for(var name in cats_info)
+            {
+                var src = cats_info[name];
+                var new_cat = new cat(name, src);
+                vm.cats.push(new_cat);
+                vm.cats()[i].print();
+                i++;
+            }
+        })();
+
+        vm.current_cat = ko.observable(vm.cats()[0]);
+
+        vm.display_cat = function()
+        {
+            vm.current_cat = ko.observable(this);
+            console.log("Clicked cat link: " + vm.current_cat().name());
+        }
+
+        vm.register_click = function()
+        {
+            console.log("Clicked cat image: " + this.name());
+            this.clicks(this.clicks() + 1);
+        }
+    }
+
+    ko.applyBindings(new ViewModel());
+
+    //--------------------------------------------------------------------------
+
+    /*var controller = {
 
         display_cat_index : -1,
 
@@ -64,22 +90,22 @@ function main()
             {
                 view_2.render_cat(model.cats[index]);
                 this.display_cat_index = index;
-                /*/*/ console.log("Clicked link: " + this.display_cat_index);
+                /**/ /*console.log("Clicked link: " + this.display_cat_index);
             }
         },
 
         register_click: function()
         {
-            /*/*/ console.log("Clicked photo: " + controller.display_cat_index);
+            /**/ /*console.log("Clicked photo: " + controller.display_cat_index);
             model.cats[this.display_cat_index].clicks++;
             view_2.render_clicks(model.cats[this.display_cat_index].clicks);
         }
-    };
+    };*/
 
 
     //===== V I E W - 1 ========================================================
 
-    var view_1 = {
+    /*var view_1 = {
 
         init : function()
         {
@@ -149,7 +175,8 @@ function main()
 
     //===== S T A R T ==========================================================
 
-    controller.init();
+    controller.init();*/
+    //ViewModel();
 }
 
 
